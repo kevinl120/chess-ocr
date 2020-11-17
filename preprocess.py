@@ -1,30 +1,28 @@
 import cv2
 import glob
-import os
+import numpy as np
 import pdf2image
 
 from constants import *
 
-def resize(img_dir=IMG_DIR, small_img_dir=SMALL_IMG_DIR):
-    os.makedirs(small_img_dir, exist_ok=True)
-    img_files = glob.glob(os.path.join(img_dir, '*'))
-    img_files.sort()
-    for f in img_files:
-        img = cv2.imread(f)
-        img = cv2.resize(img, (SMALL_IMG_WIDTH, SMALL_IMG_LEN), interpolation=cv2.INTER_AREA)
-        filename = f.split('/')[-1]
-        cv2.imwrite(os.path.join(small_img_dir, filename), img)
 
-
-def pdf_to_image(pdf_path, img_dir=IMG_DIR):
-    pages = pdf2image.convert_from_path(pdf_path)
-    for i, page in enumerate(pages):
-        page.save(os.path.join(img_dir, 'img_{:04d}.png'.format(i)), 'PNG')
+def pdfs_to_imgs(pdf_dir=PDF_DIR, img_dir=IMG_DIR):
+    print('Converting PDFs to PNGs...')
+    pdf_paths = glob.glob(os.path.join(pdf_dir, '*.pdf'))
+    i = len(glob.glob(os.path.join(img_dir, '*.png')))
+    for path in pdf_paths:
+        print(f'\tConverting {path}...')
+        pil_imgs = pdf2image.convert_from_path(path)
+        for img in pil_imgs:
+            img = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR) # convert from PIL img to cv2
+            img = cv2.resize(img, (IMG_WIDTH, IMG_LEN), interpolation=cv2.INTER_AREA)
+            cv2.imwrite(os.path.join(img_dir, f'img_{i:04d}.png'), img)
+            i += 1
+    print('Finished PDF to PNG conversion.')
 
 
 def main():
-    pdf_to_image('./data/pdf.pdf')
-    resize()
+    pdfs_to_imgs()
 
 
 if __name__ == '__main__':

@@ -36,7 +36,7 @@ def find_boards(img, min_area=1000, square_thresh=10):
 
 
 def infer_grid(img):
-	"""Infers 64 cell grid from a square image."""
+    """Infers 64 cell grid from a square image."""
 	squares = []
 	side = img.shape[:1]
 	side = side[0] / 8

@@ -1,8 +1,8 @@
 import os
 
 DATA_DIR = 'data'
-IMG_DIR = os.path.join(DATA_DIR, 'img')
-SMALL_IMG_DIR = os.path.join(DATA_DIR, 'small_img')
+PDF_DIR = os.path.join(DATA_DIR, 'pdfs')
+IMG_DIR = os.path.join(DATA_DIR, 'imgs')
 
-SMALL_IMG_WIDTH = 500
-SMALL_IMG_LEN = 750
+IMG_WIDTH = 500
+IMG_LEN = 750
